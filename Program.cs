@@ -6,11 +6,10 @@ namespace AdventOfCode_2019
     {
         static void Main(string[] args)
         {
-            CrossedWireSolver crossedWireSolver = new CrossedWireSolver();
-            crossedWireSolver.ParseFileData("data/day3_puzzle1_input.txt");
-            //crossedWireSolver.ParseFileData("data/day3_test1_input.txt");
-            Console.WriteLine($"Solution To Puzzle 1: {crossedWireSolver.GetDistanceToClosestIntersection()}");
-            Console.WriteLine($"Solution To Puzzle 2: {crossedWireSolver.GetDistanceToIntersectionWithShortestPath()}");
+            PasswordSolver solver = new PasswordSolver();
+            Console.WriteLine(solver.IsValidPassword(111122, 2));
+            Console.WriteLine($"Solution To Puzzle 1: {solver.CountPasswordPossibilities(158126, 624574, int.MaxValue)}");
+            Console.WriteLine($"Solution To Puzzle 2: {solver.CountPasswordPossibilities(158126, 624574, 2)}");
         }
     }
 }
