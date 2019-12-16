@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Text;
 using System.Collections.Generic;
 
-namespace AdventOfCode_2019
+namespace AdventOfCode_2019.IntCodes
 {   
     public class IntCode
     {
