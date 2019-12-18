@@ -3,6 +3,8 @@ namespace AdventOfCode_2019.IntCodes
     public class IntCodeSolver
     {
         private IntCode intCode;
+        private OpCode opCode = new OpCode();
+
         private int stepIndex;
         public bool EndOfCode { get; private set; }
 
@@ -26,38 +28,42 @@ namespace AdventOfCode_2019.IntCodes
             if (EndOfCode)
                 throw new System.Exception("Reached the end of the IntCode!");
 
-            int opCode = intCode[stepIndex];
-            switch (opCode)
+            //int opCode = intCode[stepIndex];
+            opCode.ParseCode(intCode[stepIndex]);
+            switch (opCode.InstructionCode)
             {
                 case 1: // Add
-                Add(stepIndex);
+                stepIndex = Add(stepIndex, opCode);
                 break;
 
                 case 2: // Multiply
-                Multiply(stepIndex);
+                stepIndex = Multiply(stepIndex, opCode);
                 break;
 
                 case 99:
                 EndOfCode = true;
                 break;
             }
-            stepIndex += 4;
         }
 
-        private void Add(int opCodeIndex)
+        private int Add(int stepIndex, OpCode opCode)
         {
-            int valueOne = intCode.GetPointerValue(opCodeIndex + 1);
-            int valueTwo = intCode.GetPointerValue(opCodeIndex + 2);
+            int valueOne = intCode.GetValue(stepIndex + 1, opCode.GetParamMode(1));
+            int valueTwo = intCode.GetValue(stepIndex + 2, opCode.GetParamMode(2));
 
-            intCode.WritePointerValue(opCodeIndex + 3, valueOne + valueTwo);
+            intCode.WriteValue(stepIndex + 3, valueOne + valueTwo, opCode.GetParamMode(3));
+
+            return stepIndex += 4;
         }
 
-        private void Multiply(int opCodeIndex)
+        private int Multiply(int stepIndex, OpCode opCode)
         {
-            int valueOne = intCode.GetPointerValue(opCodeIndex + 1);
-            int valueTwo = intCode.GetPointerValue(opCodeIndex + 2);
+            int valueOne = intCode.GetValue(stepIndex + 1, opCode.GetParamMode(1));
+            int valueTwo = intCode.GetValue(stepIndex + 2, opCode.GetParamMode(2));
 
-            intCode.WritePointerValue(opCodeIndex + 3, valueOne * valueTwo);
+            intCode.WriteValue(stepIndex + 3, valueOne * valueTwo, opCode.GetParamMode(3));
+
+            return stepIndex += 4;
         }
     }  
 }

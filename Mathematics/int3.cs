@@ -20,5 +20,20 @@ namespace AdventOfCode_2019.Mathematics
         public static int3 operator *(int b, int3 a) => new int3(a.x * b, a.y * b, a.z * b);        
         public static bool operator ==(int3 a, int3 b) => a.x == b.x && a.y == b.y && a.z == b.z;
         public static bool operator !=(int3 a, int3 b) => a.x != b.x || a.y != b.y || a.z != b.z;
+        
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return $"({x}, {y}, {z})";
+        }
     }
 }

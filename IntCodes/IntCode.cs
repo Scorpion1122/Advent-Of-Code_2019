@@ -18,14 +18,20 @@ namespace AdventOfCode_2019.IntCodes
             set { values[index] = value; }
         }
 
-        public int GetPointerValue(int pointerIndex)
+        public int GetValue(int pointerIndex, ParamMode mode)
         {
+            if (mode == ParamMode.Immediate)
+                return values[pointerIndex];
+            // ParamMode.Position is the default
             return values[values[pointerIndex]];
         }       
 
-        public void WritePointerValue(int pointerIndex, int value)
+        public void WriteValue(int pointerIndex, int value, ParamMode mode)
         {
-            values[values[pointerIndex]] = value;
+            if (mode == ParamMode.Immediate)
+                values[pointerIndex] = value;
+            if (mode == ParamMode.Position)
+                values[values[pointerIndex]] = value;
         }
 
         public void LoadDataFromPath(string dataPath)

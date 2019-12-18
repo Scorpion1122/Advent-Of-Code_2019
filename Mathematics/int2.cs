@@ -18,5 +18,20 @@ namespace AdventOfCode_2019.Mathematics
         public static int2 operator *(int b, int2 a) => new int2(a.x * b, a.y * b);        
         public static bool operator ==(int2 a, int2 b) => a.x == b.x && a.y == b.y;
         public static bool operator !=(int2 a, int2 b) => a.x != b.x || a.y != b.y;
+
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return $"({x}, {y})";
+        }
     }
 }
