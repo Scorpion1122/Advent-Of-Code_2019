@@ -29,6 +29,9 @@ namespace AdventOfCode_2019.IntCodes
 
         public ParamMode GetParamMode(int paramIndex)
         {
+            if (paramModes == null)
+                return ParamMode.Position;
+
             // Input value is from left to right, the array is from right to left
             // so invert the index
             int invertedIndex = paramModes.Length - paramIndex;
