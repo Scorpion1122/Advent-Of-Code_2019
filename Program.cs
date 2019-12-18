@@ -15,18 +15,14 @@ namespace AdventOfCode_2019
 
         private static void RunPuzzleSolutions()
         {
-            IntCode intCode = new IntCode();
-            intCode.LoadDataFromPath("data/day5_puzzle_input.txt");
+            GalaxyMap map = new GalaxyMap();
+            map.LoadDataFromFile("data/day6_puzzle_input.txt");
 
-            IntCodeSolver solver = new IntCodeSolver();
-
-            Console.WriteLine("Solving Puzzle 1: (Input Required == 1)");
-            solver.SetIntCode(intCode.CreateCopy());
-            solver.StepAll();
-
-            Console.WriteLine("Solving Puzzle 2: (Input Required == 5)");
-            solver.SetIntCode(intCode.CreateCopy());
-            solver.StepAll();
+            int totalOrbitCount = map.GetTotalOrbitCount();
+            Console.WriteLine($"Solution for Puzzle 1: {totalOrbitCount}");
+            
+            int shortestDistance = map.GetShortestPath("YOU", "SAN");
+            Console.WriteLine($"Solution for Puzzle 2: {shortestDistance}");
         }
 
         private static void ConsoleLoop()
