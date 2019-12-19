@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using AdventOfCode_2019.IntCodes;
 
 namespace AdventOfCode_2019
@@ -15,14 +16,14 @@ namespace AdventOfCode_2019
 
         private static void RunPuzzleSolutions()
         {
-            GalaxyMap map = new GalaxyMap();
-            map.LoadDataFromFile("data/day6_puzzle_input.txt");
+            Amplifier amplifier = new Amplifier();
+            amplifier.SetPhaseSettings(new int[] {0, 1, 2, 3, 4});
+            Console.WriteLine($"Solution To Puzzle 1: {amplifier.GetHighestOutputValue()}");
 
-            int totalOrbitCount = map.GetTotalOrbitCount();
-            Console.WriteLine($"Solution for Puzzle 1: {totalOrbitCount}");
-            
-            int shortestDistance = map.GetShortestPath("YOU", "SAN");
-            Console.WriteLine($"Solution for Puzzle 2: {shortestDistance}");
+            FeedbackAmplifier feedbackAmplifier = new FeedbackAmplifier();
+            feedbackAmplifier.SetPhaseSettings(new int[] {5, 6, 7, 8, 9});
+            Console.WriteLine($"Solution To Puzzle 2: {feedbackAmplifier.GetHighestOutputValue()}");
+
         }
 
         private static void ConsoleLoop()

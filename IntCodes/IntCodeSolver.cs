@@ -8,6 +8,12 @@ namespace AdventOfCode_2019.IntCodes
         private int stepIndex;
         private OpCode opCode = new OpCode();
 
+        public Input PresetInput { get; set; }
+
+        public int Output { get; private set; }
+        public bool OutputSet { get; private set; }
+        public bool BreakOnOutput { get; set; }
+
         public bool EndOfCode { get; private set; }
         public bool VerboseOutput { get; set; }
 
@@ -20,7 +26,8 @@ namespace AdventOfCode_2019.IntCodes
 
         public void StepAll()
         {
-            while (!EndOfCode)
+            OutputSet = false;
+            while (!EndOfCode && (!BreakOnOutput || !OutputSet))
             {
                 Step();
             }
@@ -43,11 +50,11 @@ namespace AdventOfCode_2019.IntCodes
                 break;
 
                 case 3:
-                stepIndex = Input(stepIndex, opCode);
+                stepIndex = ReadInput(stepIndex, opCode);
                 break;
 
                 case 4:
-                stepIndex = Output(stepIndex, opCode);
+                stepIndex = WriteOutput(stepIndex, opCode);
                 break;
 
                 case 5:
@@ -67,8 +74,7 @@ namespace AdventOfCode_2019.IntCodes
                 break;
 
                 case 99:
-                EndOfCode = true;
-                Console.WriteLine("Program Finished!\n");
+                End(stepIndex);                
                 break;
 
                 default:
@@ -96,30 +102,47 @@ namespace AdventOfCode_2019.IntCodes
             return stepIndex += 4;
         }
 
-        private int Input(int stepIndex, OpCode opCode)
+        private int ReadInput(int stepIndex, OpCode opCode)
         {
-            Console.WriteLine("Program requests input!");
+            int inputValue = 0;
 
-            while (true)
+            if (PresetInput != null && PresetInput.HasNextValue())
             {
-                string line = Console.ReadLine();
-                if (int.TryParse(line, System.Globalization.NumberStyles.Any, null, out int intValue))
+                inputValue = PresetInput.GetNextValue();
+            }
+            else
+            {
+                Console.WriteLine("Program requests input!");
+                while (true)
                 {
-                    intCode.WriteValue(stepIndex + 1, intValue, opCode.GetParamMode(1));
-                    break;
-                }
-                Console.WriteLine("INVALID INPUT: Supply integer value");
-            }            
+                    string line = Console.ReadLine();
+                    if (int.TryParse(line, System.Globalization.NumberStyles.Any, null, out int intValue))
+                    {
+                        inputValue = intValue;
+                        break;
+                    }
+                    Console.WriteLine("INVALID INPUT: Supply integer value");
+                }  
+            }
+
+            if (VerboseOutput)
+            {
+                Console.WriteLine($"- input {inputValue}");
+            }
+
+            intCode.WriteValue(stepIndex + 1, inputValue, opCode.GetParamMode(1));                      
             return stepIndex += 2;
         }
 
-        private int Output(int stepIndex, OpCode opCode)
+        private int WriteOutput(int stepIndex, OpCode opCode)
         {
-            Console.WriteLine($"Output: {intCode.GetValue(stepIndex + 1, opCode.GetParamMode(1))}");
+            Output = intCode.GetValue(stepIndex + 1, opCode.GetParamMode(1));
+            Console.WriteLine($"Output: {Output}");
             if (VerboseOutput)
             {
                 Console.WriteLine($"- stepIndex {stepIndex}");
             }
+            OutputSet = true;
             return stepIndex += 2;
         }
 
@@ -161,6 +184,20 @@ namespace AdventOfCode_2019.IntCodes
 
             intCode.WriteValue(stepIndex + 3, writeValue, opCode.GetParamMode(3));
             return stepIndex += 4;
+        }
+
+        private void End(int stepIndex)
+        {
+            EndOfCode = true;
+            if (VerboseOutput)
+            {                
+                Console.WriteLine("Program Finished!");
+                Console.WriteLine($"- stepIndex {stepIndex}\n");
+            }
+            else
+            {                
+                Console.WriteLine("Program Finished!\n");
+            }
         }
     }  
 }
