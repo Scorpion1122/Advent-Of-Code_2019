@@ -10,28 +10,40 @@ namespace AdventOfCode_2019.IntCodes
     {
         private const char SEPERATOR = ',';
 
-        private List<int> values = new List<int>();
+        private List<long> values = new List<long>();
+        public long RelativeBase { get; set; }
 
-        public int this[int index]
+        public long this[int index]
         {
             get { return values[index]; }
             set { values[index] = value; }
         }
 
-        public int GetValue(int pointerIndex, ParamMode mode)
+        public long GetValue(int pointerIndex, ParamMode mode)
         {
+            long readIndex = -1;
+            if (mode == ParamMode.Position)
+                readIndex = values[pointerIndex];
             if (mode == ParamMode.Immediate)
-                return values[pointerIndex];
-            // ParamMode.Position is the default
-            return values[values[pointerIndex]];
+                readIndex = pointerIndex;
+            if (mode == ParamMode.Relative)
+                readIndex = values[pointerIndex] + RelativeBase;
+            return (readIndex < values.Count) ? values[(int)readIndex] : 0;
         }       
 
-        public void WriteValue(int pointerIndex, int value, ParamMode mode)
+        public void WriteValue(int pointerIndex, long value, ParamMode mode)
         {
+            long writeIndex = -1;
             if (mode == ParamMode.Immediate)
-                values[pointerIndex] = value;
-            if (mode == ParamMode.Position)
-                values[values[pointerIndex]] = value;
+                writeIndex = pointerIndex;
+            if (mode == ParamMode.Position)            
+                writeIndex = values[pointerIndex];
+            if (mode == ParamMode.Relative)     
+                writeIndex = values[pointerIndex] + RelativeBase;
+
+            while (writeIndex >= values.Count)
+                values.Add(0);
+            values[(int)writeIndex] = value;
         }
 
         public void LoadDataFromPath(string dataPath)

@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
+using AdventOfCode_2019.IntCodes;
 using AdventOfCode_2019.Rendering;
 
 namespace AdventOfCode_2019
@@ -12,20 +12,21 @@ namespace AdventOfCode_2019
         static void Main(string[] args)
         {
             Console.OutputEncoding = Encoding.UTF8;
-
+            //IntCodeTests.RunBoostTests();
             RunPuzzleSolutions();
             ConsoleLoop();
         }
 
         private static void RunPuzzleSolutions()
         {
-            Image image = new Image(25, 6);
-            image.LoadDataFromFile("data/day8_puzzle_input.txt");
-            int layer = image.GetLayerWithFewestOfNumber(0);
-            int solution = image.GetNumberCountInLayer(layer, 1) * image.GetNumberCountInLayer(layer, 2);
-            Console.WriteLine($"Solution to Puzzle 1: {solution}");
+            IntCode code = new IntCode();
+            code.LoadDataFromPath("data/day9_puzzle_input.txt");
 
-            image.RenderImage();
+            IntCodeSolver solver = new IntCodeSolver();
+            solver.SetIntCode(code);
+            solver.StepAll();
+
+            Console.WriteLine($"Solution for Puzzle 1: {solver.Output}");
         }
 
         private static void ConsoleLoop()

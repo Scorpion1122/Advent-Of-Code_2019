@@ -10,7 +10,7 @@ namespace AdventOfCode_2019.IntCodes
 
         public Input PresetInput { get; set; }
 
-        public int Output { get; private set; }
+        public long Output { get; private set; }
         public bool OutputSet { get; private set; }
         public bool BreakOnOutput { get; set; }
 
@@ -73,6 +73,10 @@ namespace AdventOfCode_2019.IntCodes
                 stepIndex = Equals(stepIndex, opCode);
                 break;
 
+                case 9:
+                stepIndex = UpdateRelativeBase(stepIndex, opCode);
+                break;
+
                 case 99:
                 End(stepIndex);                
                 break;
@@ -84,8 +88,8 @@ namespace AdventOfCode_2019.IntCodes
 
         private int Add(int stepIndex, OpCode opCode)
         {
-            int valueOne = intCode.GetValue(stepIndex + 1, opCode.GetParamMode(1));
-            int valueTwo = intCode.GetValue(stepIndex + 2, opCode.GetParamMode(2));
+            long valueOne = intCode.GetValue(stepIndex + 1, opCode.GetParamMode(1));
+            long valueTwo = intCode.GetValue(stepIndex + 2, opCode.GetParamMode(2));
 
             intCode.WriteValue(stepIndex + 3, valueOne + valueTwo, opCode.GetParamMode(3));
 
@@ -94,8 +98,8 @@ namespace AdventOfCode_2019.IntCodes
 
         private int Multiply(int stepIndex, OpCode opCode)
         {
-            int valueOne = intCode.GetValue(stepIndex + 1, opCode.GetParamMode(1));
-            int valueTwo = intCode.GetValue(stepIndex + 2, opCode.GetParamMode(2));
+            long valueOne = intCode.GetValue(stepIndex + 1, opCode.GetParamMode(1));
+            long valueTwo = intCode.GetValue(stepIndex + 2, opCode.GetParamMode(2));
 
             intCode.WriteValue(stepIndex + 3, valueOne * valueTwo, opCode.GetParamMode(3));
 
@@ -148,28 +152,28 @@ namespace AdventOfCode_2019.IntCodes
 
         private int JumpIfTrue(int stepIndex, OpCode opCode)
         {
-            int boolValue = intCode.GetValue(stepIndex + 1, opCode.GetParamMode(1));
+            long boolValue = intCode.GetValue(stepIndex + 1, opCode.GetParamMode(1));
 
             if (boolValue == 0) // false;
                 return stepIndex += 3;
-            return intCode.GetValue(stepIndex + 2, opCode.GetParamMode(2));
+            return (int)intCode.GetValue(stepIndex + 2, opCode.GetParamMode(2));
         }
 
         private int JumpIfFalse(int stepIndex, OpCode opCode)
         {
-            int boolValue = intCode.GetValue(stepIndex + 1, opCode.GetParamMode(1));
+            long boolValue = intCode.GetValue(stepIndex + 1, opCode.GetParamMode(1));
 
             if (boolValue == 0) // false
-                return intCode.GetValue(stepIndex + 2, opCode.GetParamMode(2));
+                return (int)intCode.GetValue(stepIndex + 2, opCode.GetParamMode(2));
             return stepIndex += 3;
         }
 
         private int LessThan(int stepIndex, OpCode opCode)
         {
-            int valueOne = intCode.GetValue(stepIndex + 1, opCode.GetParamMode(1));
-            int valueTwo = intCode.GetValue(stepIndex + 2, opCode.GetParamMode(2));
+            long valueOne = intCode.GetValue(stepIndex + 1, opCode.GetParamMode(1));
+            long valueTwo = intCode.GetValue(stepIndex + 2, opCode.GetParamMode(2));
 
-            int writeValue = (valueOne < valueTwo) ? 1 : 0;
+            long writeValue = (valueOne < valueTwo) ? 1 : 0;
 
             intCode.WriteValue(stepIndex + 3, writeValue, opCode.GetParamMode(3));
             return stepIndex += 4;
@@ -177,13 +181,20 @@ namespace AdventOfCode_2019.IntCodes
 
         private int Equals(int stepIndex, OpCode opCode)
         {
-            int valueOne = intCode.GetValue(stepIndex + 1, opCode.GetParamMode(1));
-            int valueTwo = intCode.GetValue(stepIndex + 2, opCode.GetParamMode(2));
+            long valueOne = intCode.GetValue(stepIndex + 1, opCode.GetParamMode(1));
+            long valueTwo = intCode.GetValue(stepIndex + 2, opCode.GetParamMode(2));
 
-            int writeValue = (valueOne == valueTwo) ? 1 : 0;
+            long writeValue = (valueOne == valueTwo) ? 1 : 0;
 
             intCode.WriteValue(stepIndex + 3, writeValue, opCode.GetParamMode(3));
             return stepIndex += 4;
+        }
+
+        private int UpdateRelativeBase(int stepIndex, OpCode opCode)
+        {
+            long offset = intCode.GetValue(stepIndex + 1, opCode.GetParamMode(1));
+            intCode.RelativeBase += offset;
+            return stepIndex += 2;
         }
 
         private void End(int stepIndex)

@@ -8,6 +8,26 @@ namespace AdventOfCode_2019.IntCodes
         {            
             RunCompareTests();
             RunJumpTests();
+            RunBoostTests();
+        }
+
+        // Big Numbers
+        // Relative Mode
+        // Increased Memory
+        public static void RunBoostTests()
+        {
+            IntCode testCode = new IntCode();
+            IntCodeSolver solver = new IntCodeSolver();
+
+            Console.WriteLine("- Copy Self");
+            testCode.LoadFromString("109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99");
+            solver.SetIntCode(testCode);
+            solver.StepAll();
+            
+            Console.WriteLine("- Output 16 digit nr");
+            testCode.LoadFromString("1102,34915192,34915192,7,4,7,99,0");
+            solver.SetIntCode(testCode);
+            solver.StepAll();
         }
 
         public static void RunCompareTests()

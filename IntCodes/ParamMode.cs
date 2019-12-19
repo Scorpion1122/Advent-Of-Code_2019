@@ -4,5 +4,6 @@ namespace AdventOfCode_2019.IntCodes
     {
         Position = 0,
         Immediate = 1,
+        Relative = 2,
     }
 }

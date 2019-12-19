@@ -4,14 +4,14 @@ namespace AdventOfCode_2019.IntCodes
 {
     public class OpCode
     {
-        public int InstructionCode { get; private set; }
+        public long InstructionCode { get; private set; }
         private ParamMode[] paramModes;
 
-        public void ParseCode(int rawCode)
+        public void ParseCode(long rawCode)
         {
             // 2 Most right digits are the Instruction Code
             // After that, from right to left are the param codes
-            int[] digits = Mathematics.Math.ToDigitArray(rawCode);
+            long[] digits = Mathematics.Math.ToDigitArray(rawCode);
             if (digits.Length == 1)
             {
                 InstructionCode = digits[0];
